@@ -26,9 +26,16 @@ app.use(
   }),
 );
 
-app.post('/users', (req, res) => {
-  console.log(req.body); // тепер тіло доступне як JS-об’єкт
-  res.status(201).json({ message: 'User created' });
+app.get('/notes', (req, res) => {
+  res.status(200).json({ message: 'Retrieved all notes' });
+});
+
+app.get('/notes/:noteId', (req, res) => {
+  res.status(200).json({ message: `Retrieved note with ID: params.id` });
+});
+
+app.get('/test-error', () => {
+  throw new Error('Simulated server error');
 });
 
 // Middleware для обробки помилок
@@ -36,6 +43,10 @@ app.use((err, req, res, next) => {
   console.error(err);
 
   const isProd = process.env.NODE_ENV === 'production';
+
+  res.status(404).json({
+    message: isProd ? 'Route not found' : err.message,
+  });
 
   res.status(500).json({
     message: isProd
