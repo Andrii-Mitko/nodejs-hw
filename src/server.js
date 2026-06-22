@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import pino from 'pino-http';
 import 'dotenv/config';
+import { connectMongoDB } from './db/connectMongoDB.js';
+import { Note } from './models/note.js';
 
 const app = express();
 const PORT = process.env.PORT ?? 3000;
@@ -30,8 +32,9 @@ app.get('/', (req, res) => {
   res.status(200).json({ message: 'Hello, World!' });
 });
 
-app.get('/notes', (req, res) => {
-  res.status(200).json({ message: 'Retrieved all notes' });
+app.get('/notes', async (req, res) => {
+  const notes = await Note.find();
+  res.status(200).json(notes);
 });
 
 app.get('/notes/:noteId', (req, res) => {
@@ -64,6 +67,8 @@ app.use((err, req, res, next) => {
       : err.message,
   });
 });
+
+await connectMongoDB();
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
