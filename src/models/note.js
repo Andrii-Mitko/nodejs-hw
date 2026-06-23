@@ -14,7 +14,8 @@ const noteSchema = new Schema({
   },
   tag: {
     type: String,
-    required: true,
+    required: false,
+    default: 'Todo',
     enum: [
       'Work',
       'Personal',
@@ -28,6 +29,8 @@ const noteSchema = new Schema({
       'Todo',
     ],
   },
+
+  timestamps: true,
 });
 
 export const Note = model('Note', noteSchema);

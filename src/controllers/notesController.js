@@ -2,7 +2,7 @@ import { Note } from '../models/note.js';
 import createHttpError from 'http-errors';
 
 // GET /notes — Отримати список усіх notes
-export const getNotes = async (req, res) => {
+export const getAllNotes = async (req, res) => {
   const notes = await Note.find();
   res.status(200).json(notes);
 };
@@ -11,9 +11,7 @@ export const getNotes = async (req, res) => {
 export const getNoteById = async (req, res) => {
   const { noteId } = req.params;
   const note = await Note.findById(noteId);
-  if (!note) {
-    return res.status(404).json({ message: 'Note not found' });
-  }
+
   if (!note) {
     throw createHttpError(404, 'Note not found');
   }
