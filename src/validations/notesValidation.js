@@ -1,4 +1,5 @@
 import { Joi, Segments } from 'celebrate';
+import { TAGS } from '../constants/tags.js';
 import { isValidObjectId } from 'mongoose';
 
 // Кастомний валідатор для ObjectId
@@ -6,22 +7,46 @@ const objectIdValidator = (value, helpers) => {
   return !isValidObjectId(value) ? helpers.message('Invalid id format') : value;
 };
 
-// Схема для перевірки параметра noteId
-export const noteIdParamSchema = {
+// Для маршруту GET /notes
+export const getAllNotesSchema = {
+  [Segments.QUERY]: Joi.object({
+    page: Joi.number().min(1).default(1),
+    perPage: Joi.number().min(5).max(20).default(10),
+    tag: Joi.string()
+      .valid(...TAGS)
+      .optional(),
+    search: Joi.string().allow(''),
+  }),
+};
+
+// Для маршруту GET /notes/:noteId
+// Для маршруту DELETE /notes/:noteId
+export const noteIdSchema = {
   [Segments.PARAMS]: Joi.object({
     noteId: Joi.string().custom(objectIdValidator).required(),
   }),
 };
 
-export const createAllNoteSchema = {
-  [Segments.PARAMS]: Joi.object({
-    noteId: Joi.string().custom(objectIdValidator).required(),
-  }),
+// Для маршруту POST /notes
+export const createNoteSchema = {
   [Segments.BODY]: Joi.object({
-    name: Joi.string().min(3).max(30),
-    age: Joi.number().integer().min(12).max(65),
-    gender: Joi.string().valid('male', 'female', 'other'),
-    avgMark: Joi.number().min(2).max(12),
-    onDuty: Joi.boolean(),
-  }).min(1), // важливо: не дозволяємо порожнє тіло
+    title: Joi.string().required(),
+    content: Joi.string().allow('').optional(),
+    tag: Joi.string()
+      .valid(...TAGS)
+      .optional(),
+  }),
+};
+
+// Для маршруту PATCH /notes/:noteId
+export const updateNoteSchema = {
+  [Segments.PARAMS]: noteIdSchema[Segments.PARAMS],
+
+  [Segments.BODY]: Joi.object({
+    title: Joi.string().min(1).optional(),
+    content: Joi.string().allow('').optional(),
+    tag: Joi.string()
+      .valid(...TAGS)
+      .optional(),
+  }).min(1),
 };
