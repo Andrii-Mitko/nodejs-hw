@@ -18,9 +18,6 @@ export const getAllNotesSchema = {
       .valid(...TAGS)
       .optional(),
     search: Joi.string().allow(''),
-    minAvgMark: Joi.number().positive(),
-    sortBy: Joi.string().valid('_id', 'title', 'content', 'tag'),
-    sortOrder: Joi.string().valid('asc', 'desc'),
   }),
 };
 
