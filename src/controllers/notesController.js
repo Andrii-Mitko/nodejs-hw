@@ -1,4 +1,3 @@
-import { TAGS } from '../constants/tags.js';
 import { Note } from '../models/note.js';
 import createHttpError from 'http-errors';
 
@@ -22,7 +21,7 @@ export const getAllNotes = async (req, res) => {
 
   // Фільтр за tag
   if (tag) {
-    myQuery.where('tag').equals(TAGS);
+    myQuery.where('tag').equals(tag);
   }
 
   if (search) {
@@ -35,7 +34,7 @@ export const getAllNotes = async (req, res) => {
   }
 
   // Виконуємо одразу два запити паралельно
-  const [totalItems, notes] = await Promise.all([
+  const [totalNotes, notes] = await Promise.all([
     myQuery.clone().countDocuments(),
     myQuery
       .skip(skip)
@@ -44,12 +43,12 @@ export const getAllNotes = async (req, res) => {
   ]);
 
   // Обчислюємо загальну кількість «сторінок»
-  const totalPages = Math.ceil(totalItems / perPage);
+  const totalPages = Math.ceil(totalNotes / perPage);
 
   res.status(200).json({
     page,
     perPage,
-    totalItems,
+    totalNotes,
     totalPages,
     notes,
   });

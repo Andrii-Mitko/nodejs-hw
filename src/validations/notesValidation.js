@@ -33,7 +33,7 @@ export const noteIdSchema = {
 // Для маршруту POST /notes
 export const createNoteSchema = {
   [Segments.BODY]: Joi.object({
-    title: Joi.string().required(),
+    title: Joi.string().min(1).required(),
     content: Joi.string().allow('').optional(),
     tag: Joi.string()
       .valid(...TAGS)
