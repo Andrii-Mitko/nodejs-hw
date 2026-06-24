@@ -4,7 +4,9 @@ import { isValidObjectId } from 'mongoose';
 
 // Кастомний валідатор для ObjectId
 const objectIdValidator = (value, helpers) => {
-  return !isValidObjectId(value) ? helpers.message('Invalid id format') : value;
+  return !isValidObjectId(value)
+    ? helpers.message('Invalid noteId format')
+    : value;
 };
 
 // Для маршруту GET /notes
