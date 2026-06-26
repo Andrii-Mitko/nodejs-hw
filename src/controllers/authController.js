@@ -4,7 +4,7 @@ import { User } from '../models/user.js';
 export const registerUser = async (req, res) => {
   const { email, password } = req.body;
 
-  const existingUser = await User.findOne({ email });
+  const existingUser = await User.findOne({ email, password });
   if (existingUser) {
     throw createHttpError(400, 'Email in use');
   }
