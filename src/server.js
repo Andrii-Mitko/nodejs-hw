@@ -8,18 +8,16 @@ import { errorHandler } from './middleware/errorHandler.js';
 import notesRoutes from './routes/notesRoutes.js';
 import { errors } from 'celebrate';
 import authRoutes from './routes/authRoutes.js';
+import helmet from 'helmet';
 
 const app = express();
-const PORT = process.env.PORT ?? 3000;
+const PORT = process.env.PORT;
 
 // Глобальні middleware
 app.use(logger);
-app.use(express.json());
 app.use(cors());
-
-app.get('/', (req, res) => {
-  res.status(200).json({ message: 'Hello, World!' });
-});
+app.use(helmet());
+app.use(express.json());
 
 app.use(authRoutes);
 app.use(notesRoutes);
