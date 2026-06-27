@@ -9,15 +9,17 @@ import notesRoutes from './routes/notesRoutes.js';
 import { errors } from 'celebrate';
 import authRoutes from './routes/authRoutes.js';
 import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 const PORT = process.env.PORT;
 
 // Глобальні middleware
-app.use(logger);
-app.use(cors());
 app.use(helmet());
+app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
+app.use(logger);
 
 app.use(authRoutes);
 app.use(notesRoutes);
