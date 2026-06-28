@@ -22,6 +22,10 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(logger);
 
+app.get('/', (req, res) => {
+  res.status(200).json({ message: 'Hello, World!' });
+});
+
 app.use(notesRoutes);
 
 app.use(authRoutes);
