@@ -10,6 +10,7 @@ import { errors } from 'celebrate';
 import authRoutes from './routes/authRoutes.js';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
+import userRoutes from './routes/userRoutes.js';
 
 const app = express();
 const PORT = process.env.PORT;
@@ -21,8 +22,11 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(logger);
 
-app.use(authRoutes);
 app.use(notesRoutes);
+
+app.use(authRoutes);
+
+app.use(userRoutes);
 
 // 404 — якщо маршрут не знайдено
 app.use(notFoundHandler);
