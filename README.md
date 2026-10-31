@@ -79,7 +79,7 @@ npm start      # звичайний запуск
 PORT=3000
 NODE_ENV=development
 
-MONGODB_URL=
+MONGO_URL=
 
 JWT_SECRET=
 
