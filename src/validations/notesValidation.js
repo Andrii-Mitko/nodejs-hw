@@ -1,12 +1,17 @@
 import { Joi, Segments } from 'celebrate';
 import { TAGS } from '../constants/tags.js';
-import { isValidObjectId } from 'mongoose';
 
-// Кастомний валідатор для ObjectId
-const objectIdValidator = (value, helpers) => {
-  return !isValidObjectId(value)
-    ? helpers.message('Invalid noteId format')
-    : value;
+// Рядок рівно з 24 hex-символів
+const objectIdPattern = /^[0-9a-fA-F]{24}$/;
+
+// Для маршрутів GET, DELETE, PATCH /notes/:noteId
+export const noteIdSchema = {
+  [Segments.PARAMS]: Joi.object({
+    noteId: Joi.string()
+      .pattern(objectIdPattern)
+      .message('Invalid noteId format')
+      .required(),
+  }),
 };
 
 // Для маршруту GET /notes
@@ -18,14 +23,6 @@ export const getAllNotesSchema = {
       .valid(...TAGS)
       .optional(),
     search: Joi.string().allow(''),
-  }),
-};
-
-// Для маршруту GET /notes/:noteId
-// Для маршруту DELETE /notes/:noteId
-export const noteIdSchema = {
-  [Segments.PARAMS]: Joi.object({
-    noteId: Joi.string().custom(objectIdValidator).required(),
   }),
 };
 
